@@ -199,26 +199,6 @@ ${m.introduce}  <br>
   이전 &emsp;
   </c:if>
   
-  
-  <!--  
-  <c:forEach var="pageNum" begin="1" end="${totalPage }" step="1">
-  
-  <c:set var="pageNumIdx" value="${pageNum-1}" />
-  <c:url  value="matjib.do"  var="url">
-    <c:param name="startIdx"  value="${5*pageNumIdx}"   />
-    <c:param name="searchCondition"  value="${searchCondition}"   />
-    <c:param name="searchKeyword"  value="${searchKeyword}"   />
-  </c:url>
-  <c:set var="startNum" value="${(nowPage-1)/10+1}" />
-  <c:set var="endNum" value="${startNum+9}" />
-  
-  <c:forEach var="selectNum" begin="${startNum }" end="${endNum}" step="1">
-  <a href="${url }">${selectNum}</a>
-  </c:forEach>  
-  </c:forEach>
-  -->
-  
-  
   ${nowPage} / ${totalPage} &emsp;
   
  <c:if test="${nowPage < totalPage }">
