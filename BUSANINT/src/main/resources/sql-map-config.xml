@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC 
+  "-//mybatis.org//DTD Config 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <typeAliases>
+    <typeAlias alias="fooddata" type="com.spring.data.Getdata.FoodVo"   />  
+    <typeAlias alias="traveldata" type="com.spring.data.Getdata.TravelVo"   />  
+    <typeAlias alias="login" type="com.spring.data.Login.LoginVo"   />
+    <typeAlias alias="matjib" type="com.spring.data.matjib.FoodVo"   />
+    <typeAlias alias="travel" type="com.spring.data.travel.TravelVo"   />
+    <typeAlias alias="matjibmap" type="com.spring.data.map.MatjibMapVo"   />
+    <typeAlias alias="travelmap" type="com.spring.data.map.TravelMapVo"   />
+
+   </typeAliases>
+
+
+  <mappers>
+    <mapper resource="mappings/database-mapping.xml"  />
+    <mapper resource="mappings/login-mapping.xml"  />
+    <mapper resource="mappings/matjib-mapping.xml"  />
+    <mapper resource="mappings/travel-mapping.xml"  />
+    <mapper resource="mappings/map-mapping.xml"  />
+  </mappers>
+</configuration>  
+  

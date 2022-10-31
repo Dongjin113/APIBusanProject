@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="GETDATA">
+
+<insert id="food"  parameterType="fooddata">
+insert into matjib(seq, main_title, lng, lat, tel, introduce, business_hours, ward, addr, menu, imgaddr)
+values (#{SEQ},#{main_title},#{lng},#{lat},#{tel},#{introduce},#{business_hours},#{ward},#{addr},#{menu},#{imgaddr})
+</insert>
+
+<insert id="travel" parameterType="traveldata">
+insert into travel(seq, place, title, lng, lat, disabled, price, tel, public_transport, dayoff, subtitle, introduce, business_hours, ward, addr, homepage, imgaddr)
+values(#{SEQ}, #{place}, #{title}, #{lng}, #{lat}, #{disabled}, #{price}, #{tel}, #{public_transport}, #{dayoff}, #{subtitle}, #{introduce}, #{business_hours}, #{ward}, #{addr}, #{homepage}, #{imgaddr})
+</insert>
+
+
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TRAVEL">
+
+
+<select id="travelList" resultType="travel">
+ <![CDATA[
+select  rownum, Q.*  from (  
+   select  rownum  as rnum, K.* 
+            from  
+           ( select  * from travel
+             where  1=1 
+            ]]> 
+               <if test="searchCondition=='place' " >
+               <![CDATA[
+                  and  place like '%'||#{searchKeyword}||'%'
+                ]]> 
+                </if>
+              
+                            
+               <if test="searchCondition=='title' " >
+               <![CDATA[
+                  and  title like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+               
+               <if test="searchCondition=='ward' " >
+               <![CDATA[
+                  and ward like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+               
+               
+           <![CDATA[
+            order  by ward, SEQ desc) K   
+   where  rownum <= #{endIdx} ) Q 
+ where rnum >= #{startIdx}  
+ ]]> 
+</select>
+
+<select id="totalCount"  resultType="int"  >
+
+   select  count(*) as totalCount from travel 
+   where 1=1 
+               
+    <if test="searchCondition=='place' " >
+    
+               <![CDATA[
+                  and  place like '%'||#{searchKeyword}||'%'
+                ]]> 
+                </if>
+              
+                            
+               <if test="searchCondition=='title' " >
+               <![CDATA[
+                  and  title like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+               
+               <if test="searchCondition=='ward' " >
+               <![CDATA[
+                  and ward like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+   
+</select>
+
+
+
+<select id="selectWard" resultType="travel">
+select ward , count(*) as wardTravelCount from travel group by ward
+</select>
+
+<select id="travelEdit" resultType="travel">
+select * from travel where seq=${SEQ}
+</select>
+
+<insert id="travelInsert" parameterType="travel">
+insert into travel (seq, place, title, lng, lat, disabled, price, tel, public_transport, dayoff, subtitle, introduce, business_hours, ward, addr, homepage, imgaddr)
+values((select max(seq)+1 from travel) , #{place}, #{title}, #{lng}, #{lat}, #{disabled}, #{price}, #{tel}, #{public_transport}, #{dayoff}, #{subtitle}, #{introduce}, #{business_hours}, #{ward}, #{addr}, #{homepage}, #{imgaddr})
+</insert>
+
+<update id="travelUpdate" parameterType="travel">
+update travel set 
+place =#{place}, title =#{title}, lng=#{lng}, lat=#{lat}, disabled=#{disabled}, price=#{price}, tel=#{tel}, 
+public_transport =#{public_transport}, dayoff=#{dayoff}, subtitle=#{subtitle}, introduce=#{introduce}, business_hours=#{business_hours}, ward=#{ward}, addr=#{addr}, homepage=#{homepage}, imgaddr=#{imgaddr}
+where seq = #{SEQ}
+</update>
+
+<delete id="travelDelete" parameterType="travel" >
+ delete  from travel where seq=#{SEQ}
+</delete>
+
+<update id="travelCnt">
+update travel set cnt = cnt+1 where SEQ = #{SEQ}
+</update>
+
+<select id="travelTop3" resultType="travel" parameterType="travel">
+<![CDATA[
+ select  rownum, Q.*  from (  
+   select  rownum  as rnum, K.* 
+            from  
+           (select * from travel order by cnt desc ) K   
+   where  rownum <= 3 ) Q 
+ where rnum >= 1
+ ]]> 
+ </select>
+
+<update id="travelUpdate2" parameterType="travel">
+update travel set 
+seq = (select max(seq)+1 from travel) ,place =#{place}, title =#{title}, lng=#{lng}, lat=#{lat}, disabled=#{disabled}, price=#{price}, tel=#{tel}, 
+public_transport =#{public_transport}, dayoff=#{dayoff}, subtitle=#{subtitle}, introduce=#{introduce}, business_hours=#{business_hours}, ward=#{ward}, addr=#{addr}, homepage=#{homepage}, imgaddr=#{imgaddr}
+where seq = #{SEQ}
+</update>
+
+</mapper>

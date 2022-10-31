@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MATJIB">
+
+
+<select id="matjibList" resultType="matjib">
+ <![CDATA[
+select  rownum, Q.*  from (  
+   select  rownum  as rnum, K.* 
+            from  
+           ( select  * from matjib
+             where  1=1 
+            ]]> 
+               <if test="searchCondition=='main_title' " >
+               <![CDATA[
+                  and  main_title like '%'||#{searchKeyword}||'%'
+                ]]> 
+                </if>
+              
+                            
+               <if test="searchCondition=='menu' " >
+               <![CDATA[
+                  and  menu like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+               
+               <if test="searchCondition=='ward' " >
+               <![CDATA[
+                  and ward like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+               
+               
+           <![CDATA[
+            order  by ward, SEQ desc) K   
+   where  rownum <= #{endIdx} ) Q 
+ where rnum >= #{startIdx}  
+ ]]> 
+</select>
+
+<select id="totalCount"  resultType="int"  >
+
+   select  count(*) as totalCount from matjib 
+   where 1=1 
+               
+   <if test="searchCondition=='main_title' " >
+       and  main_title like '%'||#{searchKeyword}||'%'
+   </if>              
+                            
+   <if test="searchCondition=='menu' " >
+      and  menu like '%'||#{searchKeyword}||'%'
+   </if>
+   <if test="searchCondition=='ward' " >
+               <![CDATA[
+                  and ward like '%'||#{searchKeyword}||'%'
+               ]]>   
+               </if>
+   
+</select>
+
+<select id="selectWard" resultType="matjib">
+select ward , count(*) as wardFoodCount from matjib group by ward
+</select>
+
+<select id="matjibEdit" resultType="matjib">
+select * from matjib where seq=${SEQ}
+</select>
+
+<insert id="matjibInsert" parameterType="matjib">
+insert into matjib (seq, main_title, lng, lat, tel, introduce, business_hours, ward, addr, menu, imgaddr)
+values((select max(seq)+1 from matjib) , #{main_title}, #{lng}, #{lat}, #{tel}, #{introduce}, #{business_hours}, #{ward}, #{addr}, #{menu}, #{imgaddr})
+</insert>
+
+<update id="matjibUpdate" parameterType="matjib">
+update matjib set 
+main_title = #{main_title}, lng = #{lng}, lat=#{lat} , tel=#{tel}, introduce=#{introduce}, 
+business_hours=#{business_hours}, ward=#{ward}, addr=#{addr}, menu=#{menu} , imgaddr=#{imgaddr}
+where seq = #{SEQ}
+</update>
+
+<delete id="matjibDelete" parameterType="matjib" >
+  delete  from matjib where seq=#{SEQ}
+</delete>
+
+<update id="matjibCnt">
+update matjib set cnt = cnt+1 where SEQ = #{SEQ}
+</update>
+
+
+<select id="matjibTop5" resultType="matjib" parameterType="matjib">
+<![CDATA[
+ select  rownum, Q.*  from (  
+   select  rownum  as rnum, K.* 
+            from  
+           (select * from matjib order by cnt desc ) K   
+   where  rownum <= 3 ) Q 
+ where rnum >= 1
+ ]]> 
+ </select>
+ 
+<update id="matjibUpdate2" parameterType="matjib">
+update matjib set 
+seq = (select max(seq)+1 from matjib) ,main_title = #{main_title}, lng = #{lng}, lat=#{lat} , tel=#{tel}, introduce=#{introduce}, 
+business_hours=#{business_hours}, ward=#{ward}, addr=#{addr}, menu=#{menu} , imgaddr=#{imgaddr}
+where seq = #{SEQ}
+</update>
+
+</mapper>
